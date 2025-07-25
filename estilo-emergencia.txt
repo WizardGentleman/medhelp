@@ -1,0 +1,500 @@
+# GUIA DE ESTILO PARA PÁGINAS DE EMERGÊNCIA MEDHELP
+
+## 1. ESTRUTURA GERAL DA PÁGINA
+
+### 1.1 Container Principal
+```tsx
+container: {
+  flex: 1,
+  backgroundColor: theme.colors.background,
+}
+```
+
+### 1.2 ScrollView
+```tsx
+scrollView: {
+  flex: 1,
+}
+
+scrollContent: {
+  flexGrow: 1,
+  paddingBottom: theme.spacing.xxl * 2, // Extra padding no final
+}
+```
+
+### 1.3 Área de Conteúdo
+```tsx
+content: {
+  padding: theme.spacing.lg,
+}
+
+// Para tablets/telas maiores
+contentTablet: {
+  maxWidth: 1024,
+  alignSelf: 'center',
+  width: '100%',
+  paddingHorizontal: '5%',
+}
+```
+
+## 2. CARDS E COMPONENTES
+
+### 2.1 Card de Introdução/Informação
+```tsx
+infoCard: {
+  backgroundColor: '#FFF5F5', // Rosa muito claro para emergência
+  borderRadius: theme.borderRadius.md,
+  padding: theme.spacing.lg,
+  marginBottom: theme.spacing.lg,
+  borderWidth: 1,
+  borderColor: theme.colors.emergency,
+}
+```
+
+### 2.2 Card de Seção Padrão
+```tsx
+sectionCard: {
+  backgroundColor: 'white',
+  borderRadius: theme.borderRadius.md,
+  padding: theme.spacing.lg,
+  marginBottom: theme.spacing.lg,
+  borderWidth: 1,
+  borderColor: theme.colors.border,
+  elevation: 1,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 1 },
+  shadowOpacity: 0.1,
+  shadowRadius: 1,
+}
+```
+
+### 2.3 Cards com Header Colorido (Protocolos)
+```tsx
+protocolCard: {
+  backgroundColor: 'white',
+  borderRadius: theme.borderRadius.md,
+  marginBottom: theme.spacing.lg,
+  overflow: 'hidden',
+  borderWidth: 1,
+  borderColor: theme.colors.border,
+}
+
+protocolHeader: {
+  backgroundColor: theme.colors.emergency, // ou cor específica
+  padding: theme.spacing.lg,
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: theme.spacing.md,
+}
+
+protocolHeaderText: {
+  fontSize: theme.fontSize.lg,
+  fontFamily: 'Roboto-Bold',
+  color: 'white',
+}
+```
+
+### 2.4 Cards de Medicação
+```tsx
+medicationCard: {
+  backgroundColor: 'white',
+  borderRadius: theme.borderRadius.md,
+  padding: theme.spacing.lg,
+  marginBottom: theme.spacing.md,
+  borderWidth: 1,
+  borderColor: theme.colors.border,
+}
+
+medicationHeader: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: theme.spacing.md,
+}
+
+medicationName: {
+  fontSize: theme.fontSize.md,
+  fontFamily: 'Roboto-Bold',
+  color: theme.colors.emergency,
+}
+```
+
+## 3. FORMULÁRIOS E INPUTS
+
+### 3.1 Container de Peso/Input
+```tsx
+weightContainer: {
+  marginBottom: theme.spacing.xl,
+}
+```
+
+### 3.2 Labels
+```tsx
+label: {
+  fontSize: theme.fontSize.md,
+  fontFamily: 'Roboto-Medium',
+  color: theme.colors.text,
+  marginBottom: theme.spacing.xs,
+}
+```
+
+### 3.3 Inputs
+```tsx
+input: {
+  backgroundColor: 'white',
+  borderWidth: 1,
+  borderColor: theme.colors.border,
+  borderRadius: theme.borderRadius.md,
+  padding: theme.spacing.md,
+  fontSize: theme.fontSize.md,
+  fontFamily: 'Roboto-Regular',
+}
+
+inputError: {
+  borderColor: theme.colors.error,
+}
+```
+
+## 4. SUBMENUS E ACCORDIONS
+
+### 4.1 Submenu Container
+```tsx
+submenuContainer: {
+  marginBottom: theme.spacing.lg,
+  backgroundColor: 'white',
+  borderRadius: theme.borderRadius.lg,
+  overflow: 'visible',
+  borderWidth: 1,
+  borderColor: theme.colors.border,
+}
+
+submenuHeader: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: theme.spacing.lg,
+  backgroundColor: 'white',
+}
+
+submenuTitle: {
+  fontSize: theme.fontSize.lg,
+  fontFamily: 'Roboto-Bold',
+  color: theme.colors.text,
+}
+```
+
+## 5. CATEGORIAS E SEÇÕES
+
+### 5.1 Categoria de Medicamentos
+```tsx
+categorySection: {
+  marginBottom: theme.spacing.xl,
+}
+
+categoryHeader: {
+  padding: theme.spacing.md,
+  borderRadius: theme.borderRadius.md,
+  marginBottom: theme.spacing.md,
+  backgroundColor: getCategoryColor(category), // Cor dinâmica
+}
+
+categoryTitle: {
+  fontSize: theme.fontSize.md,
+  fontFamily: 'Roboto-Bold',
+  color: 'white',
+  textAlign: 'center',
+}
+```
+
+### 5.2 Grid de Cards
+```tsx
+drugsGrid: {
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  justifyContent: 'space-between',
+  gap: theme.spacing.md,
+}
+
+drugCard: {
+  backgroundColor: 'white',
+  borderRadius: theme.borderRadius.md,
+  padding: theme.spacing.md,
+  borderWidth: 1,
+  borderColor: theme.colors.border,
+  width: '48%',
+  minHeight: 120,
+  elevation: 1,
+}
+```
+
+## 6. SELETORES E BOTÕES DE CONCENTRAÇÃO
+
+### 6.1 Seletor de Concentração
+```tsx
+concentrationSelector: {
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  gap: theme.spacing.md,
+  marginBottom: theme.spacing.md,
+}
+
+concentrationButton: {
+  flex: 1,
+  minWidth: 150,
+  padding: theme.spacing.md,
+  borderRadius: theme.borderRadius.md,
+  borderWidth: 1,
+  borderColor: theme.colors.border,
+  backgroundColor: 'white',
+}
+
+concentrationButtonSelected: {
+  backgroundColor: theme.colors.emergency,
+  borderColor: theme.colors.emergency,
+}
+```
+
+## 7. RESULTADOS E DOSAGENS
+
+### 7.1 Card de Resultado Principal
+```tsx
+resultCard: {
+  backgroundColor: 'white',
+  borderRadius: theme.borderRadius.md,
+  borderWidth: 2,
+  borderColor: getCategoryColor(category), // Cor dinâmica
+  overflow: 'hidden',
+}
+
+resultHeader: {
+  backgroundColor: getCategoryColor(category),
+  padding: theme.spacing.lg,
+  alignItems: 'center',
+  flexDirection: 'row',
+  justifyContent: 'center',
+  gap: theme.spacing.md,
+}
+```
+
+### 7.2 Exibição de Doses
+```tsx
+doseText: {
+  fontSize: theme.fontSize.md,
+  fontFamily: 'Roboto-Regular',
+  color: theme.colors.text,
+  marginBottom: theme.spacing.xs,
+}
+
+doseHighlight: {
+  color: theme.colors.emergency,
+  fontFamily: 'Roboto-Bold',
+}
+
+doseRange: {
+  fontSize: theme.fontSize.sm,
+  fontFamily: 'Roboto-Regular',
+  color: theme.colors.textSecondary,
+  marginTop: theme.spacing.xs,
+}
+```
+
+## 8. CARDS TEMÁTICOS POR CONTEXTO
+
+### 8.1 Card de Preparo (Rosa Claro)
+```tsx
+preparationCard: {
+  backgroundColor: '#FFF5F5',
+  borderRadius: theme.borderRadius.md,
+  padding: theme.spacing.lg,
+  borderWidth: 1,
+  borderColor: theme.colors.emergency,
+}
+```
+
+### 8.2 Card de Dosagem (Azul Claro)
+```tsx
+dosageCard: {
+  backgroundColor: '#F0F4FF',
+  borderRadius: theme.borderRadius.md,
+  padding: theme.spacing.lg,
+  borderWidth: 1,
+  borderColor: theme.colors.calculator,
+}
+```
+
+### 8.3 Card de Velocidade da Bomba (Rosa)
+```tsx
+pumpRateCard: {
+  backgroundColor: '#FCE4EC',
+  borderRadius: theme.borderRadius.md,
+  padding: theme.spacing.lg,
+  borderWidth: 1,
+  borderColor: '#E91E63',
+}
+```
+
+### 8.4 Card de Monitorização (Laranja)
+```tsx
+monitoringCard: {
+  backgroundColor: '#FFF3E0',
+  borderRadius: theme.borderRadius.md,
+  padding: theme.spacing.lg,
+  borderWidth: 1,
+  borderColor: '#FF9800',
+}
+```
+
+### 8.5 Card de Estabilidade (Verde)
+```tsx
+stabilityCard: {
+  backgroundColor: '#F0FFF4',
+  borderRadius: theme.borderRadius.md,
+  padding: theme.spacing.lg,
+  borderWidth: 1,
+  borderColor: '#4CAF50',
+}
+```
+
+### 8.6 Card de Aviso/Alerta (Vermelho Claro)
+```tsx
+warningCard: {
+  backgroundColor: '#FFEBEE',
+  borderRadius: theme.borderRadius.md,
+  padding: theme.spacing.lg,
+  borderWidth: 1,
+  borderColor: '#F44336',
+}
+```
+
+## 9. PADRÕES DE CORES POR CATEGORIA
+
+### 9.1 Categorias de Medicamentos
+- **Anestésico**: #FF5722
+- **Inotrópico**: #2196F3
+- **Vasopressor**: #F44336
+- **Vasodilatador**: #4CAF50
+- **Sedativo**: #FF9800
+- **Emergency (padrão)**: theme.colors.emergency
+
+### 9.2 Estados e Níveis
+- **Sucesso/Dentro da Faixa**: #4CAF50
+- **Alerta/Atenção**: #FF9800
+- **Erro/Fora da Faixa**: #F44336
+- **Informativo**: theme.colors.calculator
+
+## 10. TIPOGRAFIA
+
+### 10.1 Hierarquia
+- **Títulos de protocolo**: fontSize.lg ou fontSize.xl, Roboto-Bold
+- **Títulos de seção**: fontSize.md, Roboto-Bold
+- **Subtítulos**: fontSize.md, Roboto-Medium
+- **Texto normal**: fontSize.sm ou fontSize.md, Roboto-Regular
+- **Texto secundário**: fontSize.sm, Roboto-Regular, color: textSecondary
+- **Valores destacados**: fontSize.xl ou fontSize.xxl, Roboto-Bold
+
+### 10.2 Texto de Dose
+- **Valor da dose**: Roboto-Bold, cor theme.colors.emergency
+- **Unidade e range**: Roboto-Regular, cor textSecondary
+
+## 11. COMPONENTES ESPECIAIS
+
+### 11.1 Calculadora Reversa
+```tsx
+reverseCalculatorSection: {
+  marginTop: theme.spacing.xxl,
+  backgroundColor: '#FCE4EC',
+  borderRadius: theme.borderRadius.lg,
+  padding: theme.spacing.lg,
+  borderWidth: 1,
+  borderColor: '#E91E63',
+}
+```
+
+### 11.2 Seletor de Formulação
+```tsx
+formulationSelector: {
+  backgroundColor: '#F5F5F5',
+  borderRadius: theme.borderRadius.md,
+  padding: theme.spacing.md,
+  marginBottom: theme.spacing.md,
+  borderWidth: 1,
+  borderColor: '#E0E0E0',
+}
+```
+
+### 11.3 Cards de Seleção Múltipla
+```tsx
+drugCardSelected: {
+  borderWidth: 2,
+  backgroundColor: '#F8F9FA',
+}
+```
+
+## 12. ESPAÇAMENTO
+
+### 12.1 Entre Seções
+- **Entre cards principais**: theme.spacing.lg
+- **Entre subseções**: theme.spacing.md
+- **Entre elementos de lista**: theme.spacing.xs
+- **Padding extra no final do scroll**: theme.spacing.xxl * 2
+
+### 12.2 Padding Interno
+- **Cards grandes**: theme.spacing.lg
+- **Cards pequenos**: theme.spacing.md
+- **Botões**: theme.spacing.md
+
+## 13. BOTÕES DE AÇÃO
+
+### 13.1 Botão Principal (Calcular)
+```tsx
+calculateButton: {
+  backgroundColor: theme.colors.emergency,
+  borderRadius: theme.borderRadius.md,
+  padding: theme.spacing.md,
+  alignItems: 'center',
+  flexDirection: 'row',
+  justifyContent: 'center',
+  gap: theme.spacing.sm,
+  marginTop: theme.spacing.lg,
+}
+
+calculateButtonDisabled: {
+  backgroundColor: theme.colors.textSecondary,
+}
+```
+
+### 13.2 Botão de Reset
+```tsx
+resetButton: {
+  backgroundColor: theme.colors.emergency,
+  borderRadius: theme.borderRadius.md,
+  padding: theme.spacing.md,
+  alignItems: 'center',
+}
+```
+
+## 14. RESPONSIVIDADE
+
+### 14.1 Adaptação para Tablets
+- Largura máxima de 1024px
+- Centralizar conteúdo
+- Padding horizontal de 5%
+
+### 14.2 Grid Flexível
+- Cards em grid de 48% de largura
+- Gap entre cards
+- Wrap automático
+
+## 15. BOAS PRÁTICAS
+
+1. **Cores Semânticas**: Usar cores que indiquem a gravidade ou tipo
+2. **Hierarquia Visual Clara**: Destacar informações críticas
+3. **Feedback Imediato**: Estados visuais para seleção e erro
+4. **Agrupamento Lógico**: Organizar por categoria ou tipo
+5. **Destaque de Valores**: Doses e cálculos em negrito e cor destacada
+6. **Cards Informativos**: Usar cores de fundo suaves para diferentes tipos
+7. **Sombras Sutis**: Elevation baixa para profundidade
+8. **Bordas Coloridas**: Indicar categoria ou estado
+9. **Ícones Contextuais**: Usar ícones relevantes para cada seção
+10. **Espaçamento Generoso**: Facilitar leitura em situações de emergência

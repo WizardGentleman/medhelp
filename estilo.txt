@@ -1,0 +1,239 @@
+# GUIA DE ESTILO PARA APLICAÇÃO MÉDICA
+
+## 1. ESTRUTURA GERAL DA PÁGINA
+
+### Container Principal
+- **Flex**: 1 (ocupar toda a altura disponível)
+- **Background**: theme.colors.background
+- **Estrutura**: ScreenHeader + ScrollView + Content
+
+### Content Area
+- **Padding**: theme.spacing.lg (padding uniforme)
+- **Gap entre elementos**: theme.spacing.lg
+
+## 2. TIPOGRAFIA
+
+### Fontes
+- **Família**: Roboto (Regular, Bold)
+- **Tamanhos**:
+  - Título principal: theme.fontSize.lg
+  - Subtítulos: theme.fontSize.md
+  - Texto normal: theme.fontSize.sm
+  - Texto pequeno: theme.fontSize.xs
+
+### Hierarquia de Texto
+- **Títulos principais**: Roboto-Bold + cor temática
+- **Subtítulos**: Roboto-Bold + theme.colors.text
+- **Texto corrido**: Roboto-Regular + theme.colors.text
+- **Texto secundário**: Roboto-Regular + theme.colors.textSecondary
+
+## 3. SISTEMA DE CORES POR TIPO DE PÁGINA
+
+### Páginas de Emergência (ex: Cardioversão)
+- **Cor principal**: theme.colors.emergency (vermelho)
+- **Background do card**: #FFF5F5
+- **Border**: theme.colors.emergency
+- **Ícones**: Heart, Zap, AlertTriangle
+
+### Páginas de Protocolo Clínico (ex: Controle Glicêmico)
+- **Múltiplas cores por categoria**:
+  - Azul: #2563EB para monitorização
+  - Verde: #16A34A para metas
+  - Laranja: #EA580C para insulina
+  - Roxo: #9333EA para cálculos
+  - Vermelho: #DC2626 para complicações
+
+### Páginas de Calculadora (ex: Cirrose Hepática)
+- **Cor principal**: theme.colors.calculator (azul)
+- **Background**: Tons claros da cor principal
+- **Ícones**: Activity, Heart, Calculator
+
+## 4. COMPONENTES DE CARD
+
+### Card Básico
+```
+backgroundColor: cor temática clara
+padding: theme.spacing.lg
+borderRadius: theme.borderRadius.md
+marginBottom: theme.spacing.lg
+borderWidth: 1 ou 2
+borderColor: cor temática
+```
+
+### Card com Header Destacado
+```
+header: {
+  backgroundColor: cor temática,
+  padding: theme.spacing.lg,
+  flexDirection: 'row',
+  alignItems: 'center'
+}
+content: {
+  padding: theme.spacing.lg,
+  backgroundColor: 'white'
+}
+```
+
+### Card de Informação
+```
+backgroundColor: #F0F4FF (azul claro)
+borderColor: theme.colors.calculator
+ícone: Info, Activity
+```
+
+### Card de Aviso/Alerta
+```
+backgroundColor: #FFF3CD (amarelo claro)
+borderColor: #F59E0B
+ícone: AlertTriangle
+```
+
+## 5. ELEMENTOS DE FORMULÁRIO
+
+### Input de Texto
+```
+borderWidth: 1
+borderColor: '#ccc'
+backgroundColor: 'white'
+padding: 10
+borderRadius: 5
+marginBottom: 20
+```
+
+### Botões de Opção
+```
+borderWidth: 1
+borderColor: theme.colors.calculator
+padding: theme.spacing.md
+borderRadius: theme.borderRadius.sm
+backgroundColor: 'white' (inativo) / cor temática (ativo)
+```
+
+### Botões de Ação
+```
+backgroundColor: cor temática
+padding: theme.spacing.md
+borderRadius: theme.borderRadius.sm
+alignItems: 'center'
+```
+
+## 6. ELEMENTOS ESPECIAIS
+
+### Tabelas Médicas
+```
+tableContainer: { minWidth: 320 }
+tableRow: { flexDirection: 'row', borderBottomWidth: 1 }
+tableCell: { 
+  flex: 1,
+  padding: 8,
+  fontSize: theme.fontSize.xs,
+  textAlign: 'center'
+}
+```
+
+### Indicador de Scroll
+```
+backgroundColor: '#F3F4F6'
+padding: pequeno
+borderRadius: 20
+fontSize: theme.fontSize.xs
+color: '#9CA3AF'
+```
+
+### Badges de Status
+```
+padding: theme.spacing.sm
+borderRadius: theme.borderRadius.sm
+borderLeftWidth: 3
+margin: theme.spacing.xs
+```
+
+## 7. ÍCONES
+
+### Por Categoria
+- **Emergência**: Heart, Zap, AlertTriangle
+- **Protocolo**: Activity, Info, Pill
+- **Calculadora**: Activity, Calculator
+- **Formulário**: CheckCircle, X
+
+### Tamanhos
+- **Header**: 24px
+- **Cards**: 20px
+- **Inline**: 16px
+
+## 8. ESPAÇAMENTOS
+
+### Padrões
+- **Entre seções**: theme.spacing.lg
+- **Dentro de cards**: theme.spacing.md
+- **Entre elementos**: theme.spacing.sm
+- **Pequenos detalhes**: theme.spacing.xs
+
+## 9. INTERATIVIDADE
+
+### Cards Expansíveis
+- **Trigger**: TouchableOpacity no título
+- **Animação**: Mostrar/ocultar conteúdo
+- **Feedback visual**: Mudança de cor ou ícone
+
+### Validação de Formulário
+- **Erro**: Border vermelho + texto de erro
+- **Sucesso**: Border verde
+- **Padrão**: Border cinza
+
+## 10. RESPONSIVIDADE
+
+### Tabelas
+- **ScrollView horizontal** para tabelas largas
+- **Indicador de scroll** para orientar usuário
+- **Largura mínima** para células
+
+### Cards
+- **Flex**: 1 para ocupar espaço disponível
+- **Margin/Padding**: Proporcionais ao tamanho da tela
+
+## 11. ACESSIBILIDADE
+
+### Contraste
+- **Texto principal**: Alto contraste
+- **Texto secundário**: Contraste moderado
+- **Backgrounds**: Cores claras para facilitar leitura
+
+### Tamanhos
+- **Área de toque**: Mínimo 44px
+- **Texto**: Tamanhos adequados para leitura
+
+## EXEMPLO DE IMPLEMENTAÇÃO
+
+```javascript
+// Card básico seguindo o padrão
+const BasicCard = () => (
+  <View style={{
+    backgroundColor: '#F0F4FF',
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.md,
+    marginBottom: theme.spacing.lg,
+    borderWidth: 2,
+    borderColor: theme.colors.calculator
+  }}>
+    <Text style={{
+      fontSize: theme.fontSize.lg,
+      fontFamily: 'Roboto-Bold',
+      color: theme.colors.calculator,
+      marginBottom: theme.spacing.sm
+    }}>
+      Título do Card
+    </Text>
+    <Text style={{
+      fontSize: theme.fontSize.sm,
+      fontFamily: 'Roboto-Regular',
+      color: theme.colors.text,
+      lineHeight: 20
+    }}>
+      Conteúdo do card
+    </Text>
+  </View>
+);
+```
+
+Este guia deve ser seguido para manter a consistência visual e funcional em todas as páginas do aplicativo médico.

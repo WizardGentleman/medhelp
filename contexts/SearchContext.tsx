@@ -43,7 +43,8 @@ const searchItems: SearchItem[] = [
   // Escores
   { id: 'escores-paliativos', title: 'Escores Paliativos', type: 'score', route: '/escores/paliativos' },
   { id: 'pps', title: 'Palliative Performance Scale - PPS', type: 'score', route: '/escores/paliativos/pps' },
-  { id: 'cha2ds2-vasc', title: 'CHA2DS2-VASc', type: 'score', route: '/escores/cha2ds2-vasc' },
+     { id: 'cha2ds2-vasc', title: 'CHA2DS2-VASc', type: 'score', route: '/escores/cha2ds2-vasc' },
+     { id: 'padua-risk', title: 'Pádua - Risco de TEV', type: 'score', route: '/escores/padua-risk' },
   { id: 'fast', title: 'FAST - Functional Assessment Staging', type: 'score', route: '/escores/paliativos/fast' },
   { id: 'rankin', title: 'Escala de Rankin', type: 'score', route: '/escores/paliativos/rankin' },
   { id: 'paliar-score', title: 'PALIAR Score', type: 'score', route: '/escores/paliativos/paliar-score' },

@@ -375,23 +375,6 @@ export default function RCPScreen() {
         <Play color="white" size={32} />
         <Text style={styles.startButtonText}>INICIAR RCP</Text>
       </TouchableOpacity>
-      
-      {/* Disclaimer Notice */}
-      <View style={styles.disclaimerContainer}>
-        <Text style={styles.disclaimerTitle}>⚠️ AVISO IMPORTANTE</Text>
-        <Text style={styles.disclaimerText}>
-          Esta ferramenta é destinada exclusivamente ao auxílio de <Text style={styles.disclaimerBold}>profissionais de saúde qualificados</Text> durante procedimentos de ressuscitação cardiopulmonar.
-        </Text>
-        <Text style={styles.disclaimerText}>
-          Recomenda-se fortemente que o usuário possua certificação em <Text style={styles.disclaimerBold}>ACLS (Advanced Cardiovascular Life Support)</Text> ou treinamento equivalente.
-        </Text>
-        <Text style={styles.disclaimerText}>
-          Os protocolos apresentados são baseados nas diretrizes da <Text style={styles.disclaimerBold}>American Heart Association (AHA)</Text> e devem ser adaptados conforme a situação clínica e protocolos institucionais locais.
-        </Text>
-        <Text style={styles.disclaimerFooter}>
-          <Text style={styles.disclaimerBold}>O desenvolvedor não se responsabiliza pelo uso inadequado desta ferramenta ou por decisões clínicas baseadas exclusivamente neste aplicativo.</Text>
-        </Text>
-      </View>
     </View>
   );
 
@@ -603,9 +586,8 @@ export default function RCPScreen() {
       animationType="fade"
     >
       <View style={styles.modalOverlay}>
-        <View style={styles.reversibleCausesModalContainer}>
-          <ScrollView style={styles.reversibleCausesScroll}>
-            <View style={[styles.modalContent, styles.reversibleCausesModal]}>
+        <ScrollView style={styles.reversibleCausesScroll}>
+          <View style={[styles.modalContent, styles.reversibleCausesModal]}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Doses Farmacológicas</Text>
               <TouchableOpacity 
@@ -628,7 +610,7 @@ export default function RCPScreen() {
                   {"\n"}• Seguido de flush com 20 mL de SF 0,9%
                   
                   {"\n"}{"\n"}<Text style={styles.conductLabel}>Acesso periférico:</Text>
-                  {"\n"}• Se utilizada via acesso periférico, elevar o membro após a infusão por 10 a 20 segundos
+                  {"\n"}• Se utilizada via acesso periférico, elevar o membro após a infusão
                 </Text>
               </View>
             </View>
@@ -705,17 +687,6 @@ export default function RCPScreen() {
             </View>
           </View>
         </ScrollView>
-        
-        {/* Fixed bottom button */}
-        <View style={styles.fixedBottomContainer}>
-          <TouchableOpacity
-            style={styles.returnToPCRButton}
-            onPress={() => setShowPharmacologyModal(false)}
-          >
-            <Text style={styles.returnToPCRButtonText}>VOLTAR PARA PCR</Text>
-          </TouchableOpacity>
-        </View>
-        </View>
       </View>
     </Modal>
   );
@@ -727,9 +698,8 @@ export default function RCPScreen() {
       animationType="fade"
     >
       <View style={styles.modalOverlay}>
-        <View style={styles.reversibleCausesModalContainer}>
-          <ScrollView style={styles.reversibleCausesScroll}>
-            <View style={[styles.modalContent, styles.reversibleCausesModal]}>
+        <ScrollView style={styles.reversibleCausesScroll}>
+          <View style={[styles.modalContent, styles.reversibleCausesModal]}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Qualidade da RCP / Via Aérea</Text>
               <TouchableOpacity 
@@ -908,17 +878,6 @@ export default function RCPScreen() {
             </View>
           </View>
         </ScrollView>
-        
-        {/* Fixed bottom button */}
-        <View style={styles.fixedBottomContainer}>
-          <TouchableOpacity
-            style={styles.returnToPCRButton}
-            onPress={() => setShowRCPQualityModal(false)}
-          >
-            <Text style={styles.returnToPCRButtonText}>VOLTAR PARA PCR</Text>
-          </TouchableOpacity>
-        </View>
-        </View>
       </View>
     </Modal>
   );
@@ -1602,65 +1561,13 @@ export default function RCPScreen() {
               </TouchableOpacity>
             </Animated.View>
           ) : (
-            <Animated.View style={{ transform: [{ scale: (nextMedication.type === 'epinephrine' && isEpinephrineDue) ? epinephrineAnim : 1 }] }}>
-              <TouchableOpacity
-                style={[
-                  getResponsiveButtonStyle(),
-                  { backgroundColor: (nextMedication.type === 'epinephrine' && isEpinephrineDue) ? '#FF4B4B' : nextMedication.color },
-                  (nextMedication.type === 'epinephrine' && isEpinephrineDue) && styles.actionButtonPulsing
-                ]}
-                onPress={() => addIntervention(nextMedication.type === 'antiarrhythmic' ? 'amiodarone' : 'epinephrine')}
-              >
-                <Syringe size={getIconSize()} color="white" />
-                <View style={{ flex: 1, alignItems: 'center' }}>
-                  <Text style={getTextStyle()}>
-                    {(nextMedication.type === 'epinephrine' && isEpinephrineDue) ? 'EPINEFRINA AGORA!' : nextMedication.name}
-                  </Text>
-                  {nextMedication.type === 'epinephrine' && (epinephrineCountdownMin > 0 || epinephrineCountdownMax > 0) && !isEpinephrineDue && (
-                    <View style={{ alignItems: 'center', marginTop: 2 }}>
-                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                        <View style={{ alignItems: 'center' }}>
-                          <Text style={[getTextStyle(), { 
-                            fontSize: isSmallScreen ? 11 : isMediumScreen ? 12 : 13,
-                            opacity: 0.8
-                          }]}>
-                            MIN
-                          </Text>
-                          <Text style={[getTextStyle(), { 
-                            fontSize: isSmallScreen ? 14 : isMediumScreen ? 15 : 16,
-                            fontWeight: 'bold' as const,
-                            color: epinephrineCountdownMin <= 0 ? '#4CAF50' : 'white'
-                          }]}>
-                            {formatTime(epinephrineCountdownMin)}
-                          </Text>
-                        </View>
-                        <Text style={[getTextStyle(), { 
-                          fontSize: isSmallScreen ? 12 : isMediumScreen ? 13 : 14,
-                          opacity: 0.6
-                        }]}>
-                          |
-                        </Text>
-                        <View style={{ alignItems: 'center' }}>
-                          <Text style={[getTextStyle(), { 
-                            fontSize: isSmallScreen ? 11 : isMediumScreen ? 12 : 13,
-                            opacity: 0.8
-                          }]}>
-                            MAX
-                          </Text>
-                          <Text style={[getTextStyle(), { 
-                            fontSize: isSmallScreen ? 14 : isMediumScreen ? 15 : 16,
-                            fontWeight: 'bold' as const,
-                            color: epinephrineCountdownMax <= 0 ? '#FF6B6B' : 'white'
-                          }]}>
-                            {formatTime(epinephrineCountdownMax)}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  )}
-                </View>
-              </TouchableOpacity>
-            </Animated.View>
+            <TouchableOpacity
+              style={[getResponsiveButtonStyle(), { backgroundColor: nextMedication.color }]}
+              onPress={() => addIntervention(nextMedication.type === 'antiarrhythmic' ? 'amiodarone' : 'epinephrine')}
+            >
+              <Syringe size={getIconSize()} color="white" />
+              <Text style={getTextStyle()}>{nextMedication.name}</Text>
+            </TouchableOpacity>
           )}
           
           <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
@@ -1826,15 +1733,9 @@ export default function RCPScreen() {
                 </Text>
                 <Text style={[
                   styles.protocolText,
-                  { color: interventions.filter(i => i.type === 'amiodarone').length >= 1 ? theme.colors.success : theme.colors.textSecondary }
+                  { color: interventions.filter(i => i.type === 'amiodarone').length > 0 ? theme.colors.success : theme.colors.textSecondary }
                 ]}>
-                  • Amiodarona {interventions.filter(i => i.type === 'amiodarone').length >= 1 ? '✓' : '(após 3º choque)'}
-                </Text>
-                <Text style={[
-                  styles.protocolText,
-                  { color: interventions.filter(i => i.type === 'amiodarone').length >= 2 ? theme.colors.success : theme.colors.textSecondary }
-                ]}>
-                  • Amiodarona {interventions.filter(i => i.type === 'amiodarone').length >= 2 ? '✓' : '(após 5º choque)'}
+                  • Amiodarona {interventions.filter(i => i.type === 'amiodarone').length > 0 ? '✓' : '(após 3º choque)'}
                 </Text>
               </View>
             </View>
@@ -2426,45 +2327,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Roboto-Medium',
     lineHeight: 18,
-  },
-  disclaimerContainer: {
-    backgroundColor: '#FFF8E1',
-    borderRadius: theme.borderRadius.md,
-    borderWidth: 1,
-    borderColor: '#FFB74D',
-    padding: theme.spacing.lg,
-    marginTop: theme.spacing.xl,
-    maxWidth: 400,
-    width: '100%',
-  },
-  disclaimerTitle: {
-    fontSize: 16,
-    fontFamily: 'Roboto-Bold',
-    color: '#E65100',
-    textAlign: 'center',
-    marginBottom: theme.spacing.md,
-  },
-  disclaimerText: {
-    fontSize: 13,
-    fontFamily: 'Roboto-Regular',
-    color: '#5D4037',
-    lineHeight: 20,
-    textAlign: 'justify',
-    marginBottom: theme.spacing.sm,
-  },
-  disclaimerBold: {
-    fontFamily: 'Roboto-Bold',
-    color: '#BF360C',
-  },
-  disclaimerFooter: {
-    fontSize: 12,
-    fontFamily: 'Roboto-Regular',
-    color: '#5D4037',
-    lineHeight: 18,
-    textAlign: 'center',
-    marginTop: theme.spacing.sm,
-    paddingTop: theme.spacing.sm,
-    borderTopWidth: 1,
-    borderTopColor: '#FFB74D',
   },
 });

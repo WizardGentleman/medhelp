@@ -1,0 +1,228 @@
+# TEMPLATE DE DESIGN PARA PÁGINAS DE MEDICAMENTOS
+# Baseado em app\medicamentos\metoclopramida.tsx
+
+## ESTRUTURA BÁSICA DO COMPONENTE:
+
+```tsx
+import { ScreenHeader } from '@/components/ScreenHeader';
+import { theme } from '@/styles/theme';
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+
+export default function [NomeMedicamento]Screen() {
+  const [expanded, setExpanded] = useState([
+    false, false, false, false, false, false, false // Ajustar quantidade conforme seções
+  ]);
+  
+  const toggle = (idx: number) => {
+    setExpanded(prev => prev.map((v, i) => i === idx ? !v : v));
+  };
+  
+  return (
+    <View style={styles.container}>
+      <ScreenHeader title="[Nome do Medicamento (Nome Comercial)]" />
+      <ScrollView style={styles.content}>
+        {/* Seções do medicamento */}
+      </ScrollView>
+    </View>
+  );
+}
+```
+
+## ESTRUTURA DE CADA SEÇÃO:
+
+```tsx
+{/* [NÚMERO]. [TÍTULO DA SEÇÃO] */}
+<TouchableOpacity
+  activeOpacity={0.9}
+  style={[styles.sectionCard, styles.card[NomeSeção]]}
+  onPress={() => toggle([índice])}
+>
+  <Text style={[styles.sectionTitle, styles.title[NomeSeção]]}>[NÚMERO]. [TÍTULO DA SEÇÃO]:</Text>
+  {expanded[[índice]] && (
+    <>
+      <Text style={styles.paragraph}>
+        • [Conteúdo principal]
+      </Text>
+      <Text style={styles.subParagraph}>
+        ◦ [Conteúdo secundário/detalhes]
+      </Text>
+    </>
+  )}
+</TouchableOpacity>
+```
+
+## SEÇÕES PADRÃO PARA MEDICAMENTOS:
+
+1. INDICAÇÕES PRINCIPAIS
+2. MECANISMO DE AÇÃO
+3. DOSES E DURAÇÃO DE TRATAMENTO
+4. EFEITOS ADVERSOS
+5. INTERAÇÕES MEDICAMENTOSAS
+6. CONTRAINDICAÇÕES (ABSOLUTAS/RELATIVAS)
+7. POPULAÇÕES ESPECÍFICAS
+
+## ESTILOS COMPLETOS:
+
+```tsx
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+  },
+  content: {
+    flex: 1,
+    padding: theme.spacing.md,
+  },
+  heading: {
+    fontSize: theme.fontSize.lg,
+    fontFamily: 'Roboto-Bold',
+    marginTop: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
+  },
+  paragraph: {
+    fontSize: theme.fontSize.md,
+    fontFamily: 'Roboto-Regular',
+    marginBottom: theme.spacing.sm,
+    lineHeight: theme.fontSize.md * 1.5,
+  },
+  subParagraph: {
+    fontSize: theme.fontSize.md,
+    fontFamily: 'Roboto-Regular',
+    marginBottom: theme.spacing.sm,
+    marginLeft: theme.spacing.md,
+    lineHeight: theme.fontSize.md * 1.5,
+  },
+  sectionCard: {
+    borderRadius: 14,
+    padding: 16,
+    marginBottom: 14,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    fontFamily: 'Roboto-Bold',
+  },
+  
+  // CORES PARA CADA SEÇÃO:
+  
+  // 1. Indicações (Azul)
+  cardIndicacoes: {
+    backgroundColor: '#E3F2FD',
+  },
+  titleIndicacoes: {
+    color: '#1976D2',
+  },
+  
+  // 2. Mecanismo (Laranja)
+  cardMecanismo: {
+    backgroundColor: '#FFF3E0',
+  },
+  titleMecanismo: {
+    color: '#F57C00',
+  },
+  
+  // 3. Doses (Verde)
+  cardDoses: {
+    backgroundColor: '#E8F5E9',
+  },
+  titleDoses: {
+    color: '#388E3C',
+  },
+  
+  // 4. Efeitos Adversos (Rosa)
+  cardEfeitos: {
+    backgroundColor: '#FCE4EC',
+  },
+  titleEfeitos: {
+    color: '#C2185B',
+  },
+  
+  // 5. Interações (Amarelo)
+  cardInteracoes: {
+    backgroundColor: '#FFFDE7',
+  },
+  titleInteracoes: {
+    color: '#FBC02D',
+  },
+  
+  // 6. Contraindicações (Roxo)
+  cardContra: {
+    backgroundColor: '#F3E5F5',
+  },
+  titleContra: {
+    color: '#7B1FA2',
+  },
+  
+  // 7. Populações Específicas (Ciano)
+  cardPopulacoes: {
+    backgroundColor: '#E0F2F1',
+  },
+  titlePopulacoes: {
+    color: '#00897B',
+  },
+});
+```
+
+## PALETA DE CORES DAS SEÇÕES:
+
+1. INDICAÇÕES: Azul (#E3F2FD fundo, #1976D2 título)
+2. MECANISMO: Laranja (#FFF3E0 fundo, #F57C00 título)
+3. DOSES: Verde (#E8F5E9 fundo, #388E3C título)
+4. EFEITOS ADVERSOS: Rosa (#FCE4EC fundo, #C2185B título)
+5. INTERAÇÕES: Amarelo (#FFFDE7 fundo, #FBC02D título)
+6. CONTRAINDICAÇÕES: Roxo (#F3E5F5 fundo, #7B1FA2 título)
+7. POPULAÇÕES: Ciano (#E0F2F1 fundo, #00897B título)
+
+## DICAS DE FORMATAÇÃO:
+
+- Use • para pontos principais
+- Use ◦ para subpontos (com marginLeft)
+- Para destacar avisos importantes, use:
+  ```tsx
+  <Text style={[styles.paragraph, { color: '#388E3C', fontWeight: 'bold' }]}>
+    • AVISO IMPORTANTE
+  </Text>
+  ```
+- Mantenha consistência nos títulos das seções (sempre em MAIÚSCULAS)
+- Use dois pontos (:) após cada título de seção
+- Organize o conteúdo de forma hierárquica com paragraph e subParagraph
+
+## COMPORTAMENTO INTERATIVO:
+
+- TouchableOpacity com activeOpacity={0.9} para feedback visual suave
+- Sistema de toggle para expandir/colapsar seções
+- Iniciar com todas as seções colapsadas (false no estado)
+- ScrollView para permitir navegação em conteúdo extenso
+
+## EXEMPLO DE USO PARA NOVO MEDICAMENTO:
+
+```tsx
+// Para Dipirona:
+<ScreenHeader title="Dipirona (Novalgina)" />
+
+// Seção 1:
+<TouchableOpacity
+  activeOpacity={0.9}
+  style={[styles.sectionCard, styles.cardIndicacoes]}
+  onPress={() => toggle(0)}
+>
+  <Text style={[styles.sectionTitle, styles.titleIndicacoes]}>1. INDICAÇÕES PRINCIPAIS:</Text>
+  {expanded[0] && (
+    <>
+      <Text style={styles.paragraph}>
+        • Analgésico e antipirético potente
+      </Text>
+      <Text style={styles.paragraph}>
+        • Dor moderada a intensa
+      </Text>
+    </>
+  )}
+</TouchableOpacity>
+```

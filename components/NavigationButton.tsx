@@ -7,7 +7,7 @@ interface NavigationButtonProps {
   icon: ReactNode;
   title: string;
   route: string;
-  type?: 'emergency' | 'calculator' | 'score' | 'converter' | 'clinical' | 'medication';
+  type?: 'emergency' | 'calculator' | 'score' | 'converter' | 'clinical' | 'medication' | 'antibiotic';
   style?: ViewStyle;
   textColor?: string;
 }
@@ -38,6 +38,8 @@ export function NavigationButton({
         return styles.clinicalButton;
       case 'medication':
         return styles.medicationButton;
+      case 'antibiotic':
+        return styles.antibioticButton;
       default:
         return styles.emergencyButton;
     }
@@ -57,6 +59,8 @@ export function NavigationButton({
         return styles.clinicalText;
       case 'medication':
         return styles.medicationText;
+      case 'antibiotic':
+        return styles.antibioticText;
       default:
         return styles.emergencyText;
     }
@@ -135,6 +139,11 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#FFD600',
   },
+  antibioticButton: {
+    backgroundColor: '#ECFEFF',
+    borderWidth: 2,
+    borderColor: '#0891B2',
+  },
   title: {
     marginTop: theme.spacing.md,
     fontFamily: 'Roboto-Medium',
@@ -158,5 +167,8 @@ const styles = StyleSheet.create({
   },
   medicationText: {
     color: '#FFA000',
+  },
+  antibioticText: {
+    color: '#0891B2',
   },
 });

@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
-import { Heart, Wind, Pill, Calculator, FlaskRound as Flask, Droplets, ClipboardList, Activity, Brain, Beaker, ArrowLeftRight, HeartPulse, AlertTriangle } from 'lucide-react-native';
+import { Heart, Wind, Pill, Calculator, FlaskRound as Flask, Droplets, ClipboardList, Activity, Brain, Beaker, ArrowLeftRight, HeartPulse, AlertTriangle, FileText, BookOpen, Stethoscope } from 'lucide-react-native';
 import { NavigationButton } from '@/components/NavigationButton';
 import { theme } from '@/styles/theme';
 
@@ -91,6 +91,28 @@ export default function HomeScreen() {
               route="/protocolo-clinico/controle-glicemico"
               type="clinical"
             />
+            
+            <NavigationButton
+              icon={<Pill size={40} color="#FF8F00" />}
+              title="Profilaxias para Imunossuprimidos"
+              route="/protocolo-clinico/profilaxia-imunossuprimido"
+              type="clinical"
+            />
+            
+            <NavigationButton
+              icon={<Droplets size={40} color="#FF8F00" />}
+              title="Hemocomponentes/Reações"
+              route="/protocolo-clinico/hemocomponentes"
+              type="clinical"
+            />
+            
+            <NavigationButton
+              icon={<Stethoscope size={40} color="#FF8F00" />}
+              title="Hipertensão arterial"
+              route="/protocolo-clinico/hipertensao-arterial"
+              type="clinical"
+            />
+            
           </View>
         </View>
 
@@ -104,12 +126,6 @@ export default function HomeScreen() {
               type="calculator"
             />
             
-            <NavigationButton
-              icon={<Flask size={40} color={theme.colors.calculator} />}
-              title="Ajuste de Dose de Antibiótico"
-              route="/calculadoras/ajuste-dose-antibiotico"
-              type="calculator"
-            />
 
             <NavigationButton
               icon={<Brain size={40} color={theme.colors.calculator} />}
@@ -163,6 +179,25 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.section}>
+          <Text style={styles.sectionTitle}>ANTIBIOTICOTERAPIA</Text>
+          <View style={styles.buttonContainer}>
+            <NavigationButton
+              icon={<FileText size={40} color="#0891B2" />}
+              title="Antibioticoterapia por Foco Infeccioso"
+              route="/antibioticoterapia/escolha-sitio-infeccioso"
+              type="antibiotic"
+            />
+            
+            <NavigationButton
+              icon={<BookOpen size={40} color="#0891B2" />}
+              title="Bulário da Antibioticoterapia"
+              route="/antibioticoterapia/bulario-antibioticoterapia"
+              type="antibiotic"
+            />
+          </View>
+        </View>
+
+        <View style={styles.section}>
           <Text style={styles.sectionTitle}>ESCORES</Text>
           <View style={styles.buttonContainer}>
             <NavigationButton
@@ -176,6 +211,27 @@ export default function HomeScreen() {
               icon={<Activity size={40} color={theme.colors.success} />}
               title="CHA2DS2-VASc"
               route="/escores/cha2ds2-vasc"
+              type="score"
+            />
+            
+            <NavigationButton
+              icon={<Activity size={40} color={theme.colors.success} />}
+              title="Pádua - Risco de TEV"
+              route="/escores/padua-risk"
+              type="score"
+            />
+            
+            <NavigationButton
+              icon={<Activity size={40} color={theme.colors.success} />}
+              title="Caprini - Risco de TEV"
+              route="/escores/caprini-risk"
+              type="score"
+            />
+            
+            <NavigationButton
+              icon={<Droplets size={40} color={theme.colors.success} />}
+              title="IMPROVE - Risco de Sangramento"
+              route="/escores/improve-risk"
               type="score"
             />
           </View>
@@ -217,6 +273,13 @@ export default function HomeScreen() {
               icon={<Pill size={40} color="#FFD600" />}
               title="Anti-eméticos"
               route="/medicamentos/anti-emeticos"
+              type="medication"
+            />
+            
+            <NavigationButton
+              icon={<Brain size={40} color="#FFD600" />}
+              title="Antidepressivos"
+              route="/medicamentos/antidepressivos"
               type="medication"
             />
           </View>

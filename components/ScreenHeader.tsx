@@ -5,7 +5,7 @@ import { theme } from '@/styles/theme';
 
 interface ScreenHeaderProps {
   title: string;
-  type?: 'emergency' | 'calculator' | 'score' | 'converter';
+  type?: 'emergency' | 'calculator' | 'score' | 'converter' | 'clinical' | 'antibiotic';
 }
 
 export function ScreenHeader({ title, type = 'emergency' }: ScreenHeaderProps) {
@@ -23,6 +23,10 @@ export function ScreenHeader({ title, type = 'emergency' }: ScreenHeaderProps) {
         return styles.scoreHeader;
       case 'converter':
         return styles.converterHeader;
+      case 'clinical':
+        return styles.clinicalHeader;
+      case 'antibiotic':
+        return styles.antibioticHeader;
       default:
         return styles.emergencyHeader;
     }
@@ -68,6 +72,12 @@ const styles = StyleSheet.create({
   },
   converterHeader: {
     backgroundColor: '#9333EA',
+  },
+  clinicalHeader: {
+    backgroundColor: theme.colors.primary,
+  },
+  antibioticHeader: {
+    backgroundColor: '#0891B2',
   },
   backButton: {
     padding: theme.spacing.xs,

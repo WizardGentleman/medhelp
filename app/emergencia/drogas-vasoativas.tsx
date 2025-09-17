@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import Slider from '@react-native-community/slider';
 import { ScreenHeader } from '@/components/ScreenHeader';
 import { theme } from '@/styles/theme';
 import { Syringe, Calculator, Info, TriangleAlert as AlertTriangle, Clock, Activity, Zap, ArrowLeftRight } from 'lucide-react-native';
@@ -137,6 +138,10 @@ const drugs: Drug[] = [
     ],
     access: 'Acesso Central ou Periférico',
     stability: '24 horas após diluição',
+    dosage: '0,5 a 10mcg/kg/min',
+    minDose: 0.5,
+    maxDose: 10,
+    unit: 'mcg/kg/min',
     specialInstructions: ['Usar equipo fotossensível'],
     category: 'vasodilator',
     finalConcentration: 200,
@@ -169,6 +174,10 @@ const drugs: Drug[] = [
     ],
     access: 'Acesso Central ou Periférico',
     stability: '24 horas após diluição',
+    dosage: '5 a 200mcg/min',
+    minDose: 5,
+    maxDose: 200,
+    unit: 'mcg/min',
     category: 'vasodilator',
     finalConcentration: 27.7,
     concentrationUnit: 'mcg'
@@ -204,10 +213,10 @@ const drugs: Drug[] = [
   {
     id: 'vasopressina',
     name: 'Vasopressina',
-    concentration: '2U/ml',
+    concentration: '20U/ml',
     preparation: [
-      '1ml (2U) + SG5% 200ml',
-      'Concentração final: 0,01U/ml'
+      '1ml (20U) + SG5% 200ml',
+      'Concentração final: 0,1U/ml'
     ],
     access: 'Acesso Venoso Central',
     stability: '24 horas após diluição',
@@ -216,7 +225,7 @@ const drugs: Drug[] = [
     maxDose: 0.04,
     unit: 'UI/min',
     category: 'vasopressor',
-    finalConcentration: 0.01,
+    finalConcentration: 0.1,
     concentrationUnit: 'UI'
   }
 ];
@@ -224,23 +233,12 @@ const drugs: Drug[] = [
 // Noradrenalina formulations
 const noradrenalinaFormulations = [
   {
-    id: '2mg-50mcg',
-    name: '2mg/4ml - 50mcg/ml',
-    description: '1 Ampola equivale a 2mg/4ml',
-    preparation: [
-      '1 Ampola equivale a 2mg/4ml',
-      'Prepare com 05 ampolas (10mg) + SG5% 180ml',
-      'Concentração final: 50mcg/ml'
-    ],
-    finalConcentration: 50
-  },
-  {
     id: '4mg-64mcg',
     name: '4mg/4ml - 64mcg/ml',
     description: '1 Ampola equivale a 4mg/4ml de noradrenalina base (equivale Noradrenalina 8 mg/4ml)',
     preparation: [
       '1 Ampola equivale a 4mg/4ml de noradrenalina base (equivale Noradrenalina 8 mg/4ml)',
-      'Prepare com 04 ampolas (16mg) + SG5% 234ml',
+      '⚠️ PREPARE COM: 04 ampolas (16mg) + SG5% 234ml',
       'Concentração final: 64mcg/ml'
     ],
     finalConcentration: 64
@@ -251,7 +249,7 @@ const noradrenalinaFormulations = [
     description: '1 Ampola equivale a 4mg/4ml de noradrenalina base (equivale Noradrenalina 8 mg/4ml)',
     preparation: [
       '1 Ampola equivale a 4mg/4ml de noradrenalina base (equivale Noradrenalina 8 mg/4ml)',
-      'Prepare com 05 ampolas (20mg) + SG5% 180ml',
+      '⚠️ PREPARE COM: 05 ampolas (20mg) + SG5% 180ml',
       'Concentração final: 100mcg/ml'
     ],
     finalConcentration: 100
@@ -262,10 +260,45 @@ const noradrenalinaFormulations = [
     description: '1 Ampola equivale a 4mg/4ml de noradrenalina base (equivale Noradrenalina 8 mg/4ml)',
     preparation: [
       '1 Ampola equivale a 4mg/4ml de noradrenalina base (equivale Noradrenalina 8 mg/4ml)',
-      'Prepare com 08 ampolas (32mg) + SG5% 218ml',
+      '⚠️ PREPARE COM: 08 ampolas (32mg) + SG5% 218ml',
       'Concentração final: 128mcg/ml'
     ],
     finalConcentration: 128
+  },
+  {
+    id: '4mg-200mcg',
+    name: '4mg/4ml - 200mcg/ml',
+    description: '1 Ampola equivale a 4mg/4ml de noradrenalina base (equivale Noradrenalina 8 mg/4ml)',
+    preparation: [
+      '1 Ampola equivale a 4mg/4ml de noradrenalina base (equivale Noradrenalina 8 mg/4ml)',
+      '⚠️ PREPARE COM: 05 ampolas (20mg) + SG5% 80ml',
+      'Concentração final: 200mcg/ml'
+    ],
+    finalConcentration: 200
+  }
+];
+
+// Vasopressina formulations
+const vasopressinaFormulations = [
+  {
+    id: '20U-0.1U',
+    name: '20U/ml - 0,1U/ml',
+    description: 'Formulação padrão',
+    preparation: [
+      '⚠️ PREPARE COM: 1ml (20U) + SG5% 199ml',
+      'Concentração final: 0,1U/ml'
+    ],
+    finalConcentration: 0.1
+  },
+  {
+    id: '20U-0.2U',
+    name: '20U/ml - 0,2U/ml',
+    description: 'Indicado para paciente com Insuficiência Renal Aguda ou não queira interferir no balanço hídrico',
+    preparation: [
+      '⚠️ PREPARE COM: 1ml (20U) + SG5% 99ml',
+      'Concentração final: 0,2U/ml'
+    ],
+    finalConcentration: 0.2
   }
 ];
 
@@ -275,6 +308,7 @@ export default function DrogasVasoativasScreen() {
   const [error, setError] = useState('');
   const [result, setResult] = useState<DrugResult | null>(null);
   const [selectedNoradrenalinaFormulation, setSelectedNoradrenalinaFormulation] = useState(noradrenalinaFormulations[0]);
+  const [selectedVasopressinaFormulation, setSelectedVasopressinaFormulation] = useState(vasopressinaFormulations[0]);
   
   // Reverse calculator states
   const [reverseWeight, setReverseWeight] = useState('');
@@ -282,6 +316,18 @@ export default function DrogasVasoativasScreen() {
   const [pumpRate, setPumpRate] = useState('');
   const [reverseResult, setReverseResult] = useState<ReverseCalculatorResult | null>(null);
   const [reverseError, setReverseError] = useState('');
+  
+  // Estados para o slider de ajuste dinâmico
+  const [sliderValue, setSliderValue] = useState(0);
+  const [dynamicDose, setDynamicDose] = useState<number | null>(null);
+  
+  // Inicializa o slider quando o resultado é calculado
+  useEffect(() => {
+    if (result && result.minPumpRate) {
+      setSliderValue(Math.round(result.minPumpRate));
+      handleSliderChange(Math.round(result.minPumpRate));
+    }
+  }, [result]);
 
   const validateWeight = (value: string) => {
     const weightNum = parseFloat(value);
@@ -334,8 +380,40 @@ export default function DrogasVasoativasScreen() {
     setWeight(value.replace(',', '.'));
     if (value) validateWeight(value);
   };
+  
+  // Função para lidar com mudanças no slider
+  const handleSliderChange = (value: number) => {
+    setSliderValue(value);
+    
+    // Calcula a dose baseada no valor do slider (ml/h)
+    if (result && result.drug.finalConcentration && weight) {
+      const weightNum = parseFloat(weight);
+      const drug = result.drug;
+      
+      // Para noradrenalina e vasopressina, usa a formulação selecionada
+      let concentrationToUse = drug.finalConcentration;
+      if (drug.id === 'noradrenalina') {
+        concentrationToUse = selectedNoradrenalinaFormulation.finalConcentration;
+      } else if (drug.id === 'vasopressina') {
+        concentrationToUse = selectedVasopressinaFormulation.finalConcentration;
+      }
+      
+      const calculatedDose = calculateDoseFromPumpRate(value, weightNum, {
+        ...drug,
+        finalConcentration: concentrationToUse
+      });
+      
+      setDynamicDose(calculatedDose);
+    }
+  };
 
   const calculatePumpRate = (dose: number, weight: number, concentration: number, unit: string): number => {
+    // Para drogas com dosagem em mcg/min ou UI/min (sem peso)
+    if (unit === 'mcg/min' || unit === 'UI/min') {
+      let dosePerHour = dose * 60; // dose per hour
+      return dosePerHour / concentration; // ml/h
+    }
+    
     // Convert dose to appropriate units and calculate ml/h
     let dosePerMin = dose * weight; // dose per minute
     let dosePerHour = dosePerMin * 60; // dose per hour
@@ -359,6 +437,11 @@ export default function DrogasVasoativasScreen() {
     
     // Convert to dose per minute
     let dosePerMin = dosePerHour / 60;
+    
+    // Para drogas com dosagem em mcg/min ou UI/min (sem peso)
+    if (drug.unit === 'mcg/min' || drug.unit === 'UI/min') {
+      return dosePerMin;
+    }
     
     // Convert to dose per kg per minute
     let dosePerKgPerMin = dosePerMin / weight;
@@ -392,20 +475,28 @@ export default function DrogasVasoativasScreen() {
 
     // Calculate infusion rates for drugs with dosage
     if (selectedDrug.minDose && selectedDrug.maxDose && selectedDrug.unit && selectedDrug.finalConcentration) {
-      const minRate = (selectedDrug.minDose * weightNum);
-      const maxRate = (selectedDrug.maxDose * weightNum);
+      // Para drogas com dosagem em mcg/min ou UI/min (sem peso)
+      const isWeightIndependent = selectedDrug.unit === 'mcg/min' || selectedDrug.unit === 'UI/min';
+      
+      const minRate = isWeightIndependent ? selectedDrug.minDose : (selectedDrug.minDose * weightNum);
+      const maxRate = isWeightIndependent ? selectedDrug.maxDose : (selectedDrug.maxDose * weightNum);
       
       drugResult.minRate = minRate;
       drugResult.maxRate = maxRate;
       
-      // Use selected formulation concentration for noradrenalina
-      const concentrationToUse = selectedDrug.id === 'noradrenalina' ? 
-        selectedNoradrenalinaFormulation.finalConcentration : 
-        selectedDrug.finalConcentration;
+      // Use selected formulation concentration for noradrenalina and vasopressina
+      let concentrationToUse = selectedDrug.finalConcentration;
+      if (selectedDrug.id === 'noradrenalina') {
+        concentrationToUse = selectedNoradrenalinaFormulation.finalConcentration;
+      } else if (selectedDrug.id === 'vasopressina') {
+        concentrationToUse = selectedVasopressinaFormulation.finalConcentration;
+      }
       
-      // Update preparation for noradrenalina
+      // Update preparation for noradrenalina and vasopressina
       if (selectedDrug.id === 'noradrenalina') {
         drugResult.preparation = selectedNoradrenalinaFormulation.preparation;
+      } else if (selectedDrug.id === 'vasopressina') {
+        drugResult.preparation = selectedVasopressinaFormulation.preparation;
       }
       
       // Calculate pump rates in ml/h
@@ -500,6 +591,9 @@ export default function DrogasVasoativasScreen() {
     setResult(null);
     setError('');
     setSelectedNoradrenalinaFormulation(noradrenalinaFormulations[0]); // Reset to first formulation
+    setSelectedVasopressinaFormulation(vasopressinaFormulations[0]); // Reset to first formulation
+    setSliderValue(0);
+    setDynamicDose(null);
   };
 
   const resetReverseCalculation = () => {
@@ -785,9 +879,73 @@ export default function DrogasVasoativasScreen() {
                   </View>
                 )}
                 
+                {/* Special selector for Vasopressina formulations */}
+                {result.drug.id === 'vasopressina' && (
+                  <View style={styles.formulationSelector}>
+                    <Text style={styles.formulationSelectorTitle}>Selecione a Formulação:</Text>
+                    {vasopressinaFormulations.map((formulation) => (
+                      <TouchableOpacity
+                        key={formulation.id}
+                        style={[
+                          styles.formulationOption,
+                          selectedVasopressinaFormulation.id === formulation.id && styles.formulationOptionSelected
+                        ]}
+                        onPress={() => {
+                          setSelectedVasopressinaFormulation(formulation);
+                          // Update result immediately with new formulation
+                          if (result) {
+                            const updatedResult = { ...result };
+                            updatedResult.preparation = formulation.preparation;
+                            
+                            // Recalculate pump rates with new concentration
+                            if (result.drug.minDose && result.drug.maxDose && result.drug.unit) {
+                              const weightNum = result.weight;
+                              updatedResult.minPumpRate = calculatePumpRate(
+                                result.drug.minDose,
+                                weightNum,
+                                formulation.finalConcentration,
+                                result.drug.unit
+                              );
+                              updatedResult.maxPumpRate = calculatePumpRate(
+                                result.drug.maxDose,
+                                weightNum,
+                                formulation.finalConcentration,
+                                result.drug.unit
+                              );
+                            }
+                            
+                            setResult(updatedResult);
+                          }
+                        }}
+                      >
+                        <Text style={[
+                          styles.formulationOptionText,
+                          selectedVasopressinaFormulation.id === formulation.id && styles.formulationOptionTextSelected
+                        ]}>
+                          {formulation.name}
+                        </Text>
+                        <Text style={styles.formulationOptionDescription}>
+                          {formulation.description}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                )}
+                
                 {result.preparation.map((prep, index) => (
-                  <Text key={index} style={styles.preparationText}>
-                    • {prep}
+                  <Text key={index} style={[
+                    styles.preparationText,
+                    prep.includes('PREPARE COM:') && {
+                      fontFamily: 'Roboto-Bold',
+                      fontSize: theme.fontSize.md,
+                      color: theme.colors.emergency,
+                      backgroundColor: '#FFEBEE',
+                      padding: theme.spacing.sm,
+                      borderRadius: theme.borderRadius.sm,
+                      marginVertical: theme.spacing.xs,
+                    }
+                  ]}>
+                    {prep.includes('PREPARE COM:') ? prep : `• ${prep}`}
                   </Text>
                 ))}
               </View>
@@ -800,33 +958,117 @@ export default function DrogasVasoativasScreen() {
                   <Text style={styles.dosageText}>
                     Dose: {result.minRate.toFixed(2)} a {result.maxRate.toFixed(2)} {result.drug.unit}
                   </Text>
-                  <Text style={styles.dosageSubtext}>
-                    Para paciente de {result.weight}kg
-                  </Text>
+                  {(result.drug.unit !== 'mcg/min' && result.drug.unit !== 'UI/min') && (
+                    <Text style={styles.dosageSubtext}>
+                      Para paciente de {result.weight}kg
+                    </Text>
+                  )}
                 </View>
               )}
 
               {result.minPumpRate && result.maxPumpRate && (
-                <View style={styles.pumpRateCard}>
-                  <Text style={styles.pumpRateTitle}>
-                    <Zap size={20} color="#E91E63" /> Velocidade da Bomba de Infusão
-                  </Text>
-                  <Text style={styles.pumpRateText}>
-                    Programar: {result.minPumpRate.toFixed(1)} a {result.maxPumpRate.toFixed(1)} ml/h
-                  </Text>
-                  <Text style={styles.pumpRateSubtext}>
-                    Concentração: {result.drug.id === 'noradrenalina' ? selectedNoradrenalinaFormulation.finalConcentration : result.drug.finalConcentration}{result.drug.concentrationUnit}/ml
-                  </Text>
-                  <View style={styles.pumpInstructions}>
-                    <Text style={styles.pumpInstructionsTitle}>Instruções para a Bomba:</Text>
-                    <Text style={styles.pumpInstructionsText}>
-                      • Conectar seringa ou equipo à bomba de infusão{'\n'}
-                      • Programar velocidade inicial: {result.minPumpRate.toFixed(1)} ml/h{'\n'}
-                      • Ajustar conforme resposta clínica{'\n'}
-                      • Velocidade máxima: {result.maxPumpRate.toFixed(1)} ml/h
+                <>
+                  <View style={styles.pumpRateCard}>
+                    <Text style={styles.pumpRateTitle}>
+                      <Zap size={20} color="#E91E63" /> Velocidade da Bomba de Infusão
                     </Text>
+                    <Text style={styles.pumpRateText}>
+                      Programar: {result.minPumpRate.toFixed(1)} a {result.maxPumpRate.toFixed(1)} ml/h
+                    </Text>
+                    <Text style={styles.pumpRateSubtext}>
+                      Concentração: {result.drug.id === 'noradrenalina' ? selectedNoradrenalinaFormulation.finalConcentration : (result.drug.id === 'vasopressina' ? selectedVasopressinaFormulation.finalConcentration : result.drug.finalConcentration)}{result.drug.concentrationUnit}/ml
+                    </Text>
+                    <View style={styles.pumpInstructions}>
+                      <Text style={styles.pumpInstructionsTitle}>Instruções para a Bomba:</Text>
+                      <Text style={styles.pumpInstructionsText}>
+                        • Conectar seringa ou equipo à bomba de infusão{'\n'}
+                        • Programar velocidade inicial: {result.minPumpRate.toFixed(1)} ml/h{'\n'}
+                        • Ajustar conforme resposta clínica{'\n'}
+                        • Velocidade máxima: {result.maxPumpRate.toFixed(1)} ml/h
+                      </Text>
+                    </View>
                   </View>
-                </View>
+                  
+                  {/* Slider de ajuste dinâmico de dose */}
+                  <View style={styles.sliderCard}>
+                    <View style={styles.sliderTitle}>
+                      <ArrowLeftRight size={20} color="#673AB7" />
+                      <Text style={[styles.sliderTitle, { marginBottom: 0 }]}>Ajuste Dinâmico de Dose</Text>
+                    </View>
+                    <Text style={styles.sliderSubtitle}>
+                      Ajuste a velocidade da bomba e veja a dose correspondente
+                    </Text>
+                    
+                    <View style={styles.sliderContainer}>
+                      <Text style={styles.sliderLabel}>Velocidade (ml/h)</Text>
+                      
+                      <View style={styles.sliderValues}>
+                        <Text style={styles.sliderMinMax}>0 ml/h</Text>
+                        <Text style={styles.sliderCurrent}>{sliderValue.toFixed(0)} ml/h</Text>
+                        <Text style={styles.sliderMinMax}>{Math.ceil(result.maxPumpRate * 1.2).toFixed(0)} ml/h</Text>
+                      </View>
+                      
+                      <Slider
+                        style={styles.slider}
+                        minimumValue={0}
+                        maximumValue={Math.ceil(result.maxPumpRate * 1.2)} // 20% acima do máximo recomendado
+                        step={1}
+                        value={sliderValue}
+                        onValueChange={handleSliderChange}
+                        minimumTrackTintColor="#673AB7"
+                        maximumTrackTintColor="#E0E0E0"
+                        thumbTintColor="#673AB7"
+                      />
+                      
+                      {dynamicDose !== null && (
+                        <View style={[
+                          styles.doseDisplay,
+                          {
+                            backgroundColor: 
+                              dynamicDose < result.drug.minDose! ? '#FFEBEE' :
+                              dynamicDose > result.drug.maxDose! ? '#FFEBEE' :
+                              '#E8F5E9',
+                            borderColor:
+                              dynamicDose < result.drug.minDose! ? '#F44336' :
+                              dynamicDose > result.drug.maxDose! ? '#F44336' :
+                              '#4CAF50'
+                          }
+                        ]}>
+                          <Text style={styles.doseDisplayLabel}>Dose Calculada:</Text>
+                          <Text style={[
+                            styles.doseDisplayValue,
+                            {
+                              color: 
+                                dynamicDose < result.drug.minDose! ? '#F44336' :
+                                dynamicDose > result.drug.maxDose! ? '#F44336' :
+                                '#4CAF50'
+                            }
+                          ]}>
+                            {dynamicDose.toFixed(3)} {result.drug.unit}
+                          </Text>
+                          
+                          {dynamicDose < result.drug.minDose! && (
+                            <Text style={styles.doseWarning}>
+                              ⚠️ Abaixo da dose mínima ({result.drug.minDose} {result.drug.unit})
+                            </Text>
+                          )}
+                          
+                          {dynamicDose > result.drug.maxDose! && (
+                            <Text style={styles.doseWarning}>
+                              ⚠️ Acima da dose máxima ({result.drug.maxDose} {result.drug.unit})
+                            </Text>
+                          )}
+                          
+                          {dynamicDose >= result.drug.minDose! && dynamicDose <= result.drug.maxDose! && (
+                            <Text style={styles.doseSafe}>
+                              ✅ Dentro da faixa terapêutica
+                            </Text>
+                          )}
+                        </View>
+                      )}
+                    </View>
+                  </View>
+                </>
               )}
 
               {/* Special section for Dopamine dosage information */}
@@ -1565,5 +1807,99 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Regular',
     color: theme.colors.textSecondary,
     lineHeight: 16,
+  },
+  // Slider styles
+  sliderCard: {
+    backgroundColor: '#F3E5F5',
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.lg,
+    borderWidth: 1,
+    borderColor: '#673AB7',
+    marginTop: theme.spacing.lg,
+  },
+  sliderTitle: {
+    fontSize: theme.fontSize.lg,
+    fontFamily: 'Roboto-Bold',
+    color: '#673AB7',
+    marginBottom: theme.spacing.xs,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+  },
+  sliderSubtitle: {
+    fontSize: theme.fontSize.sm,
+    fontFamily: 'Roboto-Regular',
+    color: theme.colors.textSecondary,
+    marginBottom: theme.spacing.lg,
+  },
+  sliderContainer: {
+    marginTop: theme.spacing.md,
+  },
+  sliderLabel: {
+    fontSize: theme.fontSize.md,
+    fontFamily: 'Roboto-Medium',
+    color: theme.colors.text,
+    marginBottom: theme.spacing.md,
+    textAlign: 'center',
+  },
+  slider: {
+    width: '100%',
+    height: 40,
+    marginVertical: theme.spacing.md,
+  },
+  sliderValues: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: theme.spacing.lg,
+  },
+  sliderMinMax: {
+    fontSize: theme.fontSize.sm,
+    fontFamily: 'Roboto-Regular',
+    color: theme.colors.textSecondary,
+  },
+  sliderCurrent: {
+    fontSize: theme.fontSize.lg,
+    fontFamily: 'Roboto-Bold',
+    color: '#673AB7',
+    backgroundColor: 'white',
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.xs,
+    borderRadius: theme.borderRadius.md,
+    borderWidth: 2,
+    borderColor: '#673AB7',
+    overflow: 'hidden',
+  },
+  doseDisplay: {
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing.lg,
+    alignItems: 'center',
+    marginTop: theme.spacing.md,
+    borderWidth: 1,
+  },
+  doseDisplayLabel: {
+    fontSize: theme.fontSize.md,
+    fontFamily: 'Roboto-Medium',
+    color: theme.colors.text,
+    marginBottom: theme.spacing.sm,
+  },
+  doseDisplayValue: {
+    fontSize: theme.fontSize.xl,
+    fontFamily: 'Roboto-Bold',
+    marginBottom: theme.spacing.sm,
+  },
+  doseWarning: {
+    fontSize: theme.fontSize.sm,
+    fontFamily: 'Roboto-Medium',
+    color: '#F44336',
+    textAlign: 'center',
+    marginTop: theme.spacing.xs,
+  },
+  doseSafe: {
+    fontSize: theme.fontSize.sm,
+    fontFamily: 'Roboto-Medium',
+    color: '#4CAF50',
+    textAlign: 'center',
+    marginTop: theme.spacing.xs,
   },
 });

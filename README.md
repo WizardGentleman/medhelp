@@ -28,7 +28,7 @@ Aplicativo móvel de saúde e emergência médica desenvolvido com React Native 
 
 1. Clone o repositório:
 ```bash
-git clone https://github.com/SEU_USUARIO/medhelp.git
+git clone https://github.com/WizardGentleman/medhelp.git
 cd medhelp
 ```
 
